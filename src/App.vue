@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1>WITH ACTIONS</h1>
     <div style="margin-top: 1em">
       <AppSelect :options="options" v-model:select="select" placeholder="Выберите животное"/>
     </div>
