@@ -2,16 +2,16 @@
   <div class="table-wrapper">
     <table class="table">
       <thead>
-      <tr class="header-row">
-        <td class="header-cell" v-for="col in columns" :key="col.field">
-          <HeaderFilter :column="col" v-model:sortType="sortType"/>
-        </td>
-      </tr>
+        <tr class="header-row">
+          <td class="header-cell" v-for="col in columns" :key="col.field">
+            <HeaderFilter :column="col" v-model:sortType="sortType" />
+          </td>
+        </tr>
       </thead>
       <tbody>
-      <tr v-for="string in compData" :key="string.id" class="row">
-        <td class="cell" v-for="col in columns" :key="col.field">{{ string[col.field] }}</td>
-      </tr>
+        <tr v-for="string in compData" :key="string.id" class="row">
+          <td class="cell" v-for="col in columns" :key="col.field">{{ string[col.field as keyof typeof string] }}</td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 
-import {computed, ref} from "vue";
+import { computed, ref } from "vue";
 import HeaderFilter from "./HeaderFilter.vue";
 
 const props = defineProps<{
@@ -33,7 +33,7 @@ const props = defineProps<{
     square: number
   }[],
   columns:
-      { field: string, title: string, type: string }[]
+  { field: string, title: string, type: string }[]
 }>()
 const sortType = ref({
   field: null,
@@ -41,34 +41,38 @@ const sortType = ref({
 })
 const compData = computed(() => {
   const arr = [...props.data]
-  const {field, sortType:sorting} = sortType.value
+  const { field, sortType: sorting } = sortType.value
 
-  if(field) {
-    const index = props.columns.findIndex(item=>item.field === field)
+  if (field) {
+    const index = props.columns.findIndex(item => item.field === field)
     if (index > -1) {
       const sortingType = props.columns[index].type
       if (sortingType === "string") {
-        return arr.sort((a, b)=>{
-          if(sorting === "asc") {
-            return a[field].toLowerCase().localeCompare(b[field])
+        // @ts-ignore
+        return arr.sort((a, b) => {
+          if (sorting === "asc") {
+            return a[field as keyof typeof a].toString().toLowerCase().localeCompare(b[field])
           } else if (sorting === "desc") {
-            return b[field].toLowerCase().localeCompare(a[field])
+            return b[field as keyof typeof b].toString().toLowerCase().localeCompare(a[field])
           }
         })
-      } else if(sortingType === "date") {
-        return arr.sort((a, b)=>{
+      } else if (sortingType === "date") {
+        // @ts-ignore
+        return arr.sort((a, b) => {
           const aDate = new Date(a[field])
           const bDate = new Date(b[field])
-          if(sorting === "asc") {
-
+          if (sorting === "asc") {
+            // @ts-ignore
             return aDate - bDate
           } else if (sorting === "desc") {
-            return bDate -  aDate
+            // @ts-ignore
+            return bDate - aDate
           }
         })
-      } else if(sortingType === "number") {
-        return arr.sort((a, b)=>{
-          if(sorting === "asc") {
+      } else if (sortingType === "number") {
+        // @ts-ignore
+        return arr.sort((a, b) => {
+          if (sorting === "asc") {
             return a[field] - b[field]
           } else if (sorting === "desc") {
             return b[field] - a[field]
@@ -125,7 +129,7 @@ const compData = computed(() => {
   background: lightgray;
 }
 
-.row:not(:last-child) > .cell {
+.row:not(:last-child)>.cell {
   border-bottom: 1px solid darkgray;
 }
 

@@ -15,7 +15,7 @@
         <div class="options" :class="{isOpen}" :style="{height: isOpen? dropDownHeight: 0}"
              @transitionend="ontransitionend">
           <div ref="optionsRef">
-            <button class="option" v-for="item in options" :key="item.id" @click="$event=>select(item.id)">
+            <button class="option" v-for="item in options" :key="item.id" @click="()=>select(item.id)">
               {{ item.title }}
             </button>
           </div>
@@ -35,7 +35,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: "update:select", select: null | number)
+  (e: "update:select", select: null | number) : void
 }>()
 
 const value = computed(() => {

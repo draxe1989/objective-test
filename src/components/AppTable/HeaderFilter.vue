@@ -60,6 +60,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
+  // @ts-ignore
   (e: "update:sortType", sortType: SortType)
 }>()
 
